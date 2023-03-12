@@ -14,7 +14,7 @@
           - steam
           - mesa
           - firefox
-          - kdeconnect-indicator
+          - kdeconnect
           - thunderbird
           - teamspeak3
           - canon-pixma-mg5700-complete
@@ -25,7 +25,7 @@
           - kdenlive
           - gimp
           - libreoffice-fresh
-          - keepass-xc
+          - keepassxc
           - telegram-desktop
           - xsane
         state: present
