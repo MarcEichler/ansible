@@ -1,34 +1,30 @@
 all:
     children:
         servers:
+            hosts:
+                vserver:
+                    ansible_host: fougel.de
+                    ansible_become: yes
+                    ansible_become_method: sudo 
+                    ansible_become_pass: '{{ sudo_pass_vserver }}'
+            
         desktops:
-        
-servers:
-    hosts:
-        vserver:
-            ansible_host: fougel.de
-            ansible_become: yes
-            ansible_become_method: sudo 
-            ansible_become_pass: '{{ sudo_pass_vserver }}'
-            
-desktops:
-    hosts:
-        desktop:
-            ansible_host: localhost
-            ansible_become: yes
-            ansible_become_method: sudo 
-            ansible_become_pass: '{{ sudo_pass_desktop }}'
-        notebook:
-            ansible_host: 192.168.178.240
-            ansible_become: yes
-            ansible_become_method: sudo 
-            ansible_become_pass: '{{ sudo_pass_desktop }}'
+            hosts:
+                desktop:
+                    ansible_host: localhost
+                    ansible_become: yes
+                    ansible_become_method: sudo 
+                    ansible_become_pass: '{{ sudo_pass_desktop }}'
+                notebook:
+                    ansible_host: 192.168.178.240
+                    ansible_become: yes
+                    ansible_become_method: sudo 
+                    ansible_become_pass: '{{ sudo_pass_desktop }}'
 
-raspis:
-    hosts:
-        raspi:
-            ansible_host: raspi
-            ansible_become: yes
-            ansible_become_method: sudo 
-            ansible_become_pass: '{{ sudo_pass_raspi }}'
-            
+        raspis:
+            hosts:
+                raspi:
+                    ansible_host: raspi
+                    ansible_become: yes
+                    ansible_become_method: sudo 
+                    ansible_become_pass: '{{ sudo_pass_raspi }}'
