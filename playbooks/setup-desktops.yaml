@@ -22,10 +22,14 @@
           - brscan5
           - zathura
           - obs-studio
-          - kdenlive
-          - gimp
           - libreoffice-fresh
           - keepassxc
           - telegram-desktop
           - xsane
         state: present
+    - name: Install necessary flatpaks
+      flatpak:
+        name:
+          - org.gimp.GIMP
+          - org.kde.kdenlive
+          - org.godotengine.Godot
