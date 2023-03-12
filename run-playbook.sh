@@ -2,4 +2,4 @@
 
 playbook="playbooks/$1"
 
-ansible-playbook -i site.yaml --ask-vault-password --extra-vars '@passwd.yaml' "$playbook"
+ansible-playbook -v -i site.yaml --ask-vault-password --extra-vars '@passwd.yaml' "$playbook"
