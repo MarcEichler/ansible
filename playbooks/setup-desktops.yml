@@ -32,4 +32,5 @@
         name:
           - org.gimp.GIMP
           - org.kde.kdenlive
+          - org.videolan.VLC
           - org.godotengine.Godot
