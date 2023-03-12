@@ -12,4 +12,5 @@
           - apache2
           - docker
           - ansible
+          - zsh
         state: present
