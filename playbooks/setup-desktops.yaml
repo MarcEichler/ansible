@@ -1,0 +1,31 @@
+---
+- hosts: desktops
+  become: true
+  become_user: root
+  tasks:
+    - name: Install necessary packages on arch desktops
+      when: ansible_os_family == 'Archlinux'
+      pacman:
+        name: 
+          - plasma
+          - plasma-wayland-session
+          - pipewire
+          - pipewire-pulse
+          - steam
+          - mesa
+          - firefox
+          - kdeconnect-indicator
+          - thunderbird
+          - teamspeak3
+          - canon-pixma-mg5700-complete
+          - brscan4
+          - brscan5
+          - zathura
+          - obs-studio
+          - kdenlive
+          - gimp
+          - libreoffice-fresh
+          - keepass-xc
+          - telegram-desktop
+          - xsane
+        state: present

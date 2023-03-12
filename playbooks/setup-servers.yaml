@@ -1,0 +1,15 @@
+---
+- hosts: servers
+  become: true
+  become_user: root
+  tasks:
+    - name: Update repositories cache
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: Install necessary packages on Debian/Ubuntu servers
+      ansible.builtin.apt:
+        name: 
+          - apache2
+          - docker
+          - ansible
+        state: present
