@@ -1,0 +1,44 @@
+---
+- hosts: raspis
+  vars: # Sets variables
+    # Define the name and image of the container to deploy.
+    pihole_container_name: pihole
+    pihole_container_image: pihole/pihole
+    # Defines the command to run inside the container.
+    pihole_container_command: "" # /s6-init
+  tasks:
+    - name: Update repositories cache
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: Ensure necessary packages are installed
+      ansible.builtin.apt:
+        name: 
+          - docker
+          - ansible
+          - steamlink
+          - kodi
+          - zsh
+        state: present
+    # Installs Docker Module for Python.
+    # Allows you to manage Docker containers from within Ansible playbooks.
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+    # Pulls the default docker image (Ubuntu)
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ pihole_container_image }}"
+        source: pull
+    # Create container
+    - name: Create {{ pihole_container_name }} container
+      community.docker.docker_container:
+        name: "{{ pihole_container_name }}"
+        image: "{{ pihole_container_image }}"
+        command: "{{ pihole_container_command }}"
+        published_ports:
+          - "53:53/udp"
+          - "53:53/tcp"
+          - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+          - "80:80/tcp"
+          - "443:443/tcp"
+        state: started
