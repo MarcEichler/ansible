@@ -1,0 +1,6 @@
+---
+- import_playbook: all.yml
+- import_playbook: update-all.yml
+- import_playbook: setup-desktops.yml
+- import_playbook: setup-servers.yml
+- import_playbook: setup-raspis.yml
