@@ -1,45 +1,38 @@
 ---
-- hosts: desktops
+- hosts: ts3servers
   become: true
   become_user: root
+  vars:
+    teamspeak_container_image: teamspeak
   tasks:
-    - name: Install necessary packages on arch desktops
-      when: ansible_os_family == 'Archlinux'
-      pacman:
+    - name: Ensure necessary packages are installed
+      ansible.builtin.apt:
         name: 
-          - amd-ucode
-          - brscan4
-          - brscan5
-          - canon-pixma-mg5700-complete
-          - firefox
-          - flatpak
-          - gigolo
-          - kakoune
-          - kdeconnect
-          - keepassxc
-          - libreoffice-fresh
-          - mesa
-          - obs-studio
-          - pipewire
-          - pipewire-pulse
-          - plasma
-          - plasma-wayland-session
-          - pulseaudio-alsa
-          - steam
-          - teamspeak3
-          - telegram-desktop
-          - thunderbird
-          - xsane
-          - yakuake
-          - zathura
-          - zsh
-        state: latest
-    - name: Install necessary flatpaks
-      flatpak:
-        name:
-          - org.gimp.GIMP
-          - org.kde.kdenlive
-          - org.videolan.VLC
-          - org.godotengine.Godot
-          - io.mpv.Mpv
-        state: latest
+          - docker-ce
+          - pip
+        state: present
+    # Installs Docker Module for Python.
+    # Allows you to manage Docker containers from within Ansible playbooks.
+    - name: Ensure Docker Module for Python is installed
+      pip:
+        name: docker
+    # Pulls the default docker image (Ubuntu)
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ teamspeak_container_image }}"
+        source: pull
+    # Create container
+    - name: Ensure teamspeak container is running
+      community.docker.docker_container:
+        name: "{{ teamspeak_container_image }}"
+        image: "{{ teamspeak_container_image }}"
+        published_ports:
+          - "9987:9987/udp"
+          - "10011:10011"
+          - "30033:30033"
+        env:
+          TS3SERVER_LICENSE: accept
+        volumes:
+          - 'ts3data:/var/ts3server'
+        state: started
+
