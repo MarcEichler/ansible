@@ -9,8 +9,17 @@
     - name: Install necessary packages on Debian/Ubuntu servers
       ansible.builtin.apt:
         name: 
-          - apache2
-          - docker
           - ansible
           - zsh
+          - glances
+          - curl # für docker-ce
+          - ca-certificates # für docker-ce
+          - openjdk-19-jdk # für minecraft
         state: present
+    - name: Ensure minecraft user exists
+      ansible.builtin.user:
+        name: minecraft
+    - name: Ensure ts3 user exiss
+      ansible.builtin.user:
+        name: ts3
+        state: absent

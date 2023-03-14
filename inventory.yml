@@ -3,10 +3,11 @@ all:
         servers:
             hosts:
                 vserver:
-                    ansible_host: fougel.de
+                    ansible_host: strato
                     ansible_become: yes
                     ansible_become_method: sudo 
                     ansible_become_pass: '{{ sudo_pass_vserver }}'
+                    ansible_python_interpreter: /usr/bin/python3
             
         desktops:
             hosts:
