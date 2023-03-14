@@ -41,4 +41,7 @@ all:
       minecraftservers:
         hosts:
           vserver:
+      foundryvtt:
+        hosts:
+          vserver:
 

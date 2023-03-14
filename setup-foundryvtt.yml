@@ -1,0 +1,39 @@
+---
+- hosts: foundryvtt
+  become: true
+  become_user: root
+  vars:
+    foundryvtt_container_name: foundryvtt
+    foundryvtt_container_image: felddy/foundryvtt
+  tasks:
+    - name: Ensure necessary packages are installed
+      ansible.builtin.apt:
+        name: 
+          - docker-ce
+          - pip
+        state: present
+    # Installs Docker Module for Python.
+    # Allows you to manage Docker containers from within Ansible playbooks.
+    - name: Ensure Docker Module for Python is installed
+      pip:
+        name: docker
+    # Pulls the default docker image (Ubuntu)
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ foundryvtt_container_image }}"
+        source: pull
+    # Create container
+    - name: Ensure Foundry VTT container is running
+      community.docker.docker_container:
+        name: "{{ foundryvtt_container_name }}"
+        image: "{{ foundryvtt_container_image }}"
+        published_ports:
+          - "30000:30000/tcp"
+        env:
+          FOUNDRY_USERNAME: '{{ foundryvtt_username }}'
+          FOUNDRY_PASSWORD: '{{ foundryvtt_password }}'
+          FOUNDRY_ADMIN_KEY: '{{ foundryvtt_admin_key }}'
+        volumes:
+          - 'foundryvtt:/data'
+        state: started
+
