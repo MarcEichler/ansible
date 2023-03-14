@@ -1,0 +1,17 @@
+---
+- hosts: steamservers
+  become: true
+  become_user: root
+  vars:
+    steam_user: steam
+  tasks:
+    - name: Ensure steam user exists
+      ansible.builtin.user:
+        name: '{{ steam_user }}'
+    - name: Ensure helper script is installed
+      ansible.builtin.copy:
+        src: roles/steamserver/files/steamctl.sh
+        dest: '~{{ steam_user }}/steam/'
+        owner: '{{ steam_user }}'
+        mode: u=rwx,g=r,o=r
+

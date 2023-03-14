@@ -1,0 +1,45 @@
+---
+- hosts: desktops
+  become: true
+  become_user: root
+  tasks:
+    - name: Install necessary packages on arch desktops
+      when: ansible_os_family == 'Archlinux'
+      pacman:
+        name: 
+          - amd-ucode
+          - brscan4
+          - brscan5
+          - canon-pixma-mg5700-complete
+          - firefox
+          - flatpak
+          - gigolo
+          - kakoune
+          - kdeconnect
+          - keepassxc
+          - libreoffice-fresh
+          - mesa
+          - obs-studio
+          - pipewire
+          - pipewire-pulse
+          - plasma
+          - plasma-wayland-session
+          - pulseaudio-alsa
+          - steam
+          - teamspeak3
+          - telegram-desktop
+          - thunderbird
+          - xsane
+          - yakuake
+          - zathura
+          - zsh
+        state: latest
+    - name: Install necessary flatpaks
+      flatpak:
+        name:
+          - org.gimp.GIMP
+          - org.kde.kdenlive
+          - org.videolan.VLC
+          - org.godotengine.Godot
+          - io.mpv.Mpv
+        state: latest

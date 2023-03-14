@@ -1,31 +1,44 @@
 all:
+    hosts:
+      vserver:
+        ansible_host: strato
+        ansible_become: yes
+        ansible_become_method: sudo
+        ansible_become_pass: '{{ sudo_pass_vserver }}'
+        ansible_python_interpreter: /usr/bin/python3
+      desktop:
+        ansible_host: localhost
+        ansible_become: yes
+        ansible_become_method: sudo 
+        ansible_become_pass: '{{ sudo_pass_desktop }}'
+      notebook:
+        ansible_host: 192.168.178.240
+        ansible_become: yes
+        ansible_become_method: sudo 
+        ansible_become_pass: '{{ sudo_pass_desktop }}'
+      raspi:
+        ansible_host: raspi
+        ansible_become: yes
+        ansible_become_method: sudo 
+        ansible_become_pass: '{{ sudo_pass_raspi }}'
     children:
-        servers:
-            hosts:
-                vserver:
-                    ansible_host: strato
-                    ansible_become: yes
-                    ansible_become_method: sudo 
-                    ansible_become_pass: '{{ sudo_pass_vserver }}'
-                    ansible_python_interpreter: /usr/bin/python3
-            
-        desktops:
-            hosts:
-                desktop:
-                    ansible_host: localhost
-                    ansible_become: yes
-                    ansible_become_method: sudo 
-                    ansible_become_pass: '{{ sudo_pass_desktop }}'
-                notebook:
-                    ansible_host: 192.168.178.240
-                    ansible_become: yes
-                    ansible_become_method: sudo 
-                    ansible_become_pass: '{{ sudo_pass_desktop }}'
+      servers:
+        hosts:
+          vserver:
+      desktops:
+        hosts:
+          desktop:
+          notebook:
+      raspis:
+        hosts:
+          raspi:
+      steamservers:
+        hosts:
+          vserver:
+      ts3servers:
+        hosts:
+          vserver:
+      minecraftservers:
+        hosts:
+          vserver:
 
-        raspis:
-            hosts:
-                raspi:
-                    ansible_host: raspi
-                    ansible_become: yes
-                    ansible_become_method: sudo 
-                    ansible_become_pass: '{{ sudo_pass_raspi }}'
