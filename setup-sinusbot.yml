@@ -7,7 +7,7 @@
     sinusbot_container_name: sinusbot
     sinusbot_container_image: sinusbot/docker
   tasks:
-    - name: Ensure steam user exists
+    - name: Ensure sinusbot user exists
       ansible.builtin.user:
         name: '{{ sinusbot_user }}'
     - name: Ensure necessary packages are installed
@@ -27,6 +27,8 @@
         name: "{{ sinusbot_container_image }}"
         source: pull
         tag: latest
+    - getent:
+        database: passwd
     # Create container
     - name: Ensure Sinusbot container is running
       community.docker.docker_container:
@@ -35,10 +37,12 @@
         published_ports:
           - "8087:8087"
         volumes:
-          - 'sinusbot_scipts:/opt/sinusbot/scripts'
+          - 'sinusbot_scripts:/opt/sinusbot/scripts'
           - 'sinusbot_data:/opt/sinusbot/data'
         env:
           OVERRIDE_PASSWORD: '{{ sinusbot_password }}'
+          UID: "{{ getent_passwd[sinusbot_user].1 }}"
+          GID: "{{ getent_passwd[sinusbot_user].2 }}"
         restart_policy: always
         state: started
 
