@@ -21,6 +21,7 @@
       community.docker.docker_image:
         name: "{{ teamspeak_container_image }}"
         source: pull
+        tag: latest
     # Create container
     - name: Ensure teamspeak container is running
       community.docker.docker_container:

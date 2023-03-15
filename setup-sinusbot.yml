@@ -26,6 +26,7 @@
       community.docker.docker_image:
         name: "{{ sinusbot_container_image }}"
         source: pull
+        tag: latest
     # Create container
     - name: Ensure Sinusbot container is running
       community.docker.docker_container:
