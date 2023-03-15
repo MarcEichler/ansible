@@ -1,45 +1,45 @@
 ---
-- hosts: desktops
+- hosts: minecraftservers
   become: true
   become_user: root
+  vars:
+    minecraft_container_name: minecraft
+    minecraft_container_image: itzg/minecraft-server
+    minecraft_user: minecraft
   tasks:
-    - name: Install necessary packages on arch desktops
-      when: ansible_os_family == 'Archlinux'
-      pacman:
+    - name: Ensure necessary packages are installed
+      ansible.builtin.apt:
         name: 
-          - amd-ucode
-          - brscan4
-          - brscan5
-          - canon-pixma-mg5700-complete
-          - firefox
-          - flatpak
-          - gigolo
-          - kakoune
-          - kdeconnect
-          - keepassxc
-          - libreoffice-fresh
-          - mesa
-          - obs-studio
-          - pipewire
-          - pipewire-pulse
-          - plasma
-          - plasma-wayland-session
-          - pulseaudio-alsa
-          - steam
-          - teamspeak3
-          - telegram-desktop
-          - thunderbird
-          - xsane
-          - yakuake
-          - zathura
-          - zsh
-        state: latest
-    - name: Install necessary flatpaks
-      flatpak:
-        name:
-          - org.gimp.GIMP
-          - org.kde.kdenlive
-          - org.videolan.VLC
-          - org.godotengine.Godot
-          - io.mpv.Mpv
-        state: latest
+          - docker-ce
+          - pip
+        state: present
+    # Installs Docker Module for Python.
+    # Allows you to manage Docker containers from within Ansible playbooks.
+    - name: Ensure Docker Module for Python is installed
+      pip:
+        name: docker
+    # Pulls the default docker image (Ubuntu)
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ minecraft_container_image }}"
+        source: pull
+        tag: latest
+    - getent:
+        database: passwd
+    # Create container
+    - name: Ensure minecraft container is running
+      community.docker.docker_container:
+        name: "{{ minecraft_container_name }}"
+        image: "{{ minecraft_container_image }}"
+        published_ports:
+          - "25565:25565"
+        env:
+          EULA: "TRUE"
+          UID: "{{ getent_passwd[minecraft_user].1 }}"
+          GID: "{{ getent_passwd[minecraft_user].2 }}"
+          user: minecraft:minecraft
+        volumes:
+          - 'minecraft:/data'
+        restart_policy: always
+        state: started
+
