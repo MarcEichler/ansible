@@ -44,4 +44,7 @@ all:
       foundryvtt:
         hosts:
           vserver:
+      sinusbot:
+        hosts:
+          vserver:
 

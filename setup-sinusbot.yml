@@ -1,10 +1,15 @@
 ---
-- hosts: ts3servers
+- hosts: foundryvtt
   become: true
   become_user: root
   vars:
-    teamspeak_container_image: teamspeak
+    sinusbot_user: sinusbot
+    sinusbot_container_name: sinusbot
+    sinusbot_container_image: sinusbot/docker
   tasks:
+    - name: Ensure steam user exists
+      ansible.builtin.user:
+        name: '{{ sinusbot_user }}'
     - name: Ensure necessary packages are installed
       ansible.builtin.apt:
         name: 
@@ -19,21 +24,20 @@
     # Pulls the default docker image (Ubuntu)
     - name: Pull default Docker image
       community.docker.docker_image:
-        name: "{{ teamspeak_container_image }}"
+        name: "{{ sinusbot_container_image }}"
         source: pull
     # Create container
-    - name: Ensure teamspeak container is running
+    - name: Ensure Sinusbot container is running
       community.docker.docker_container:
-        name: "{{ teamspeak_container_image }}"
-        image: "{{ teamspeak_container_image }}"
+        name: "{{ sinusbot_container_name }}"
+        image: "{{ sinusbot_container_image }}"
         published_ports:
-          - "9987:9987/udp"
-          - "10011:10011"
-          - "30033:30033"
-        env:
-          TS3SERVER_LICENSE: accept
+          - "8087:8087"
         volumes:
-          - 'ts3data:/var/ts3server'
+          - 'sinusbot_scipts:/opt/sinusbot/scripts'
+          - 'sinusbot_data:/opt/sinusbot/data'
+        env:
+          OVERRIDE_PASSWORD: '{{ sinusbot_password }}'
         restart_policy: always
         state: started
 
