@@ -1,0 +1,42 @@
+---
+- hosts: elastic
+  become: true
+  become_user: root
+  vars:
+    elastic_user: elasticsearch
+    elastic_tag: 8.7.0
+    elastic_network: elastic
+    elasticsearch_image: elasticsearch
+    kibana_image: kibana
+  tasks:
+    - name: Ensure user exists
+      ansible.builtin.user:
+        name: "{{ elastic_user }}"
+    - getent:
+        database: passwd
+    - name: Ensure elasticsearch container is running
+      community.docker.docker_container:
+        name: "{{ elasticsearch_image }}"
+        image: "{{ elasticsearch_image }}:{{ elastic_tag }}"
+        networks:
+          - name: "{{ elastic_network }}"
+        env:
+          ES_JAVA_OPTS: "-Xms2048m -Xmx2048m"
+          node.store.allow_mmap: "false"
+          xpack.security.transport.ssl.verification_mode: "certificate"
+        memory: 4G
+        published_ports:
+          - "9200:9200"
+        restart_policy: always
+        state: started
+    - name: Ensure kibana container is running
+      community.docker.docker_container:
+        name: "{{ kibana_image }}"
+        image: "{{ kibana_image }}:{{ elastic_tag }}"
+        networks:
+          - name: "{{ elastic_network }}"
+        published_ports:
+          - "5601:5601"
+        restart_policy: always
+        state: started
+
