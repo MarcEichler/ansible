@@ -47,4 +47,10 @@ all:
       sinusbot:
         hosts:
           vserver:
+      elastic:
+        hosts:
+          vserver:
+      satisfactory:
+        hosts:
+          vserver:
 
