@@ -18,6 +18,17 @@
     - name: Ensure Docker Module for Python is installed
       pip:
         name: docker
+    # Copy backup script
+    - name: Copy backup script
+      ansible.builtin.copy:
+        src: roles/minecraft/files/backup-minecraft.sh
+        dest: /var/backup
+    # Schedule backup script
+    - name: Schedule backup
+      ansible.builtin.cron:
+        name: "backup minecraft"
+        hour: "3"
+        job: "/var/backup/backup-minecraft.sh"
     # Pulls the default docker image (Ubuntu)
     - name: Pull default Docker image
       community.docker.docker_image:
@@ -38,6 +49,7 @@
           UID: "{{ getent_passwd[minecraft_user].1 }}"
           GID: "{{ getent_passwd[minecraft_user].2 }}"
           user: minecraft:minecraft
+          MEMORY: 4G
         volumes:
           - 'minecraft:/data'
         restart_policy: always
