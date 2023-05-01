@@ -1,0 +1,50 @@
+---
+- hosts: satisfactory
+  become: true
+  become_user: root
+  vars:
+    satisfactory_container_name: satisfactory
+    satisfactory_container_image: wolveix/satisfactory-server:latest
+    satisfactory_user: satisfactory
+  tasks:
+    - name: Ensure user exists
+      ansible.builtin.user:
+        name: "{{ satisfactory_user }}"
+    - name: Ensure necessary packages are installed
+      ansible.builtin.apt:
+        name: 
+          - docker-ce
+          - pip
+        state: present
+    # Installs Docker Module for Python.
+    # Allows you to manage Docker containers from within Ansible playbooks.
+    - name: Ensure Docker Module for Python is installed
+      pip:
+        name: docker
+    # Pulls the default docker image (Ubuntu)
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ satisfactory_container_image }}"
+        source: pull
+        tag: latest
+    - getent:
+        database: passwd
+    # Create container
+    - name: Ensure container is running
+      community.docker.docker_container:
+        name: "{{ satisfactory_container_name }}"
+        image: "{{ satisfactory_container_image }}"
+        published_ports:
+          - "7777:7777/udp"
+          - "15000:15000/udp"
+          - "15777:15777/udp"
+        env:
+          PUID: "{{ getent_passwd[satisfactory_user].1 }}"
+          PGID: "{{ getent_passwd[satisfactory_user].2 }}"
+          MAXPLAYERS: "4"
+          STEAMBETA: "FALSE"
+        volumes:
+          - 'satisfactory:/config'
+        restart_policy: always
+        state: started
+
