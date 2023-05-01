@@ -1,0 +1,66 @@
+---
+- hosts: steamservers
+  become: true
+  become_user: root
+  vars:
+    csgo_container_name: csgo2
+    steam_container_image: cm2network/csgo
+    steam_user: steam
+    csgo_install_dir: /data/csgo_ds
+  tasks:
+    - name: Ensure Steam user exists
+      ansible.builtin.user:
+        name: "{{ steam_user }}"
+    - getent:
+        database: passwd
+    # Create container
+    #    - name: Build steamcmd image
+    #  community.docker.docker_image:
+    #   build:
+    #     path: roles/steamserver/files/
+    #     dockerfile: Dockerfile
+    #     args:
+    #       PUID: "{{ getent_passwd[steam_user].1 }}"
+    #   name: steamcmd
+    #   tag: steam
+    #   push: false
+    #   source: build
+    - name: Ensure Steam container is running
+      community.docker.docker_container:
+        name: "{{ csgo_container_name }}"
+        image: steamcmd
+        command: >
+          bash -c "
+          /home/steam/steamcmd/steamcmd.sh
+          +force_install_dir {{ csgo_install_dir }}
+          +login anonymous
+          +app_update 740 
+          +quit
+          &&
+          {{ csgo_install_dir }}/srcds_run
+          -game csgo
+          -usercon
+          -nobreakpad
+          +sv_setsteamaccount \"{{ csgo_token }}\"
+          +sv_password \"{{ csgo_server_password }}\"
+          +rcon_password \"{{ csgo_server_password }}\"
+          +game_type 0 
+          +game_mode 1 
+          +mapgroup mg_active 
+          +map de_inferno"
+        user: steam:steam
+        env:
+          SRCDS_TOKEN: "1825CDDF5AD052F35272D113D9ECB911"
+          SRCDS_PW: 'kätzchen'
+          SRCDS_RCONPW: 'kätzchen'
+        volumes:
+          - "csgo2:/data"
+        published_ports:
+          - "27015:27015/tcp"
+          - "27015:27015/udp"
+          - "27036:27036/tcp"
+          - "27020:27020/udp"
+          - "27031-27036:27031-27036/udp"
+        restart_policy: no
+        state: started
+
