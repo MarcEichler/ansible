@@ -3,6 +3,7 @@
   become: true
   become_user: root
   vars:
+    teamspeak_container_name: teamspeak
     teamspeak_container_image: teamspeak
   tasks:
     - name: Ensure necessary packages are installed
@@ -22,10 +23,12 @@
         name: "{{ teamspeak_container_image }}"
         source: pull
         tag: latest
+    - getent:
+        database: passwd
     # Create container
     - name: Ensure teamspeak container is running
       community.docker.docker_container:
-        name: "{{ teamspeak_container_image }}"
+        name: "{{ teamspeak_container_name }}"
         image: "{{ teamspeak_container_image }}"
         published_ports:
           - "9987:9987/udp"
