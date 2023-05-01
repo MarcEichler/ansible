@@ -1,5 +1,5 @@
 ---
-- hosts: foundryvtt
+- hosts: sinusbot
   become: true
   become_user: root
   vars:
