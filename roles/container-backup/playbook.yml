@@ -6,14 +6,14 @@
     # Copy Dockerfile
     - name: Copy Dockerfile
       ansible.builtin.copy:
-        src: roles/container-backup/files/Dockerfile
+        src: files/Dockerfile
         dest: /tmp/container-backup/
         mode: "775"
     # Schedule backup script every monday morning
     # Copy backup script
     - name: Copy backup script
       ansible.builtin.copy:
-        src: roles/container-backup/files/backup-container.sh
+        src: files/backup-container.sh
         dest: /var/backup
         mode: "775"
     - name: Build the container backup image

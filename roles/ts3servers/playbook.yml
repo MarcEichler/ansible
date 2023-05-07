@@ -7,13 +7,6 @@
     teamspeak_container_image: teamspeak
     teamspeak_data_dir: /var/ts3server
   tasks:
-    - import_tasks: setup-docker.yml
-    # Copy backup script
-    - name: Copy backup script
-      ansible.builtin.copy:
-        src: roles/ts3servers/files/backup-container.sh
-        dest: /var/backup
-        mode: "775"
     # Schedule backup script every monday morning
     - name: Schedule backup
       ansible.builtin.cron:

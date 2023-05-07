@@ -32,6 +32,10 @@ all:
       raspis:
         hosts:
           raspi:
+      docker:
+        vserver:
+      container-backup:
+        vserver:
       steamservers:
         hosts:
           vserver:

@@ -1,0 +1,16 @@
+---
+- hosts: docker
+  become: true
+  become_user: root
+  tasks:
+    - name: Ensure docker packages are installed
+      ansible.builtin.apt:
+        name: 
+          - docker-ce
+          - pip
+        state: present
+    # Installs Docker Module for Python.
+    # Allows you to manage Docker containers from within Ansible playbooks.
+    - name: Ensure Docker Module for Python is installed
+      pip:
+        name: docker

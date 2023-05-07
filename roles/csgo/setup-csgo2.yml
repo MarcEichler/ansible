@@ -3,9 +3,10 @@
   become: true
   become_user: root
   vars:
-    csgo_container_name: csgo2
-    steam_container_image: cm2network/steamcmd
+    csgo_container_name: csgo
+    steam_container_image: cm2network/csgo
     steam_user: steam
+    csgo_install_dir: /data/
   tasks:
     - name: Ensure Steam user exists
       ansible.builtin.user:
@@ -33,25 +34,21 @@
       community.docker.docker_container:
         name: "{{ csgo_container_name }}"
         image: "{{ steam_container_image }}"
-        command: sleep 24h
-          #          - /home/steam/steamcmd/steamcmd.sh +login anonymous +force_install_dir /data/csgo_ds +app_update 740 +quit
-          #          - /data/csgods/srcds_run -game csgo -nobreakpad -usercon +game_type 0 +game_mode 1 +mapgroup mg_active +map de_inferno
-        env:
-          UID: "{{ getent_passwd[steam_user].1 }}"
-          GID: "{{ getent_passwd[steam_user].2 }}"
-          PUID: "{{ getent_passwd[steam_user].1 }}"
-          PGID: "{{ getent_passwd[steam_user].2 }}"
-          USER: steam
+        command: >
+          bash -c "/home/steam/steamcmd/steamcmd.sh 
+                    +force_install_dir {{ csgo_install_dir }} 
+                    +login anonymous 
+                    +app_update 740"
         user: steam:steam
+        env:
+          SRCDS_TOKEN: "1825CDDF5AD052F35272D113D9ECB911"
+          SRCDS_PW: 'kätzchen'
+          SRCDS_RCONPW: 'kätzchen'
         published_ports:
           - "27015:27015"
           - "27036:27036/tcp"
           - "27020:27020/udp"
           - "27031-27036:27031-27036/udp"
-        volumes:
-          - 'csgo2:/data'
-          - '/etc/passwd:/etc/passwd:ro'
-          - '/etc/group:/etc/group:ro'
         restart_policy: always
         state: started
 

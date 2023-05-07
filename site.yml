@@ -1,5 +1,6 @@
 ---
-- import_playbook: update-all.yml
-- import_playbook: setup-desktops.yml
-- import_playbook: setup-servers.yml
-- import_playbook: setup-raspis.yml
+- import_playbook: roles/docker/playbook.yml
+- import_playbook: roles/container-backup/playbook.yml
+- import_playbook: roles/ts3servers/playbook.yml
+- import_playbook: roles/minecraftservers/playbook.yml
+- import_playbook: roles/foundryvtt/playbook.yml
