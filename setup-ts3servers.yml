@@ -5,18 +5,26 @@
   vars:
     teamspeak_container_name: teamspeak
     teamspeak_container_image: teamspeak
+    teamspeak_data_dir: /var/ts3server
   tasks:
-    - name: Ensure necessary packages are installed
-      ansible.builtin.apt:
-        name: 
-          - docker-ce
-          - pip
-        state: present
-    # Installs Docker Module for Python.
-    # Allows you to manage Docker containers from within Ansible playbooks.
-    - name: Ensure Docker Module for Python is installed
-      pip:
-        name: docker
+    - import_tasks: setup-docker.yml
+    # Copy backup script
+    - name: Copy backup script
+      ansible.builtin.copy:
+        src: roles/ts3servers/files/backup-container.sh
+        dest: /var/backup
+        mode: "775"
+    # Schedule backup script every monday morning
+    - name: Schedule backup
+      ansible.builtin.cron:
+        name: "backup {{ teamspeak_container_name }}"
+        minute: "0"
+        hour: "3"
+        day: "*"
+        month: "*"
+        weekday: "1"
+        user: root
+        job: "/var/backup/backup-container.sh {{ teamspeak_container_name }} {{ teamspeak_data_dir }}"
     # Pulls the default docker image (Ubuntu)
     - name: Pull default Docker image
       community.docker.docker_image:
@@ -37,7 +45,7 @@
         env:
           TS3SERVER_LICENSE: accept
         volumes:
-          - 'ts3data:/var/ts3server'
+          - 'ts3data:{{ teamspeak_data_dir }}'
         restart_policy: always
         state: started
 
