@@ -17,7 +17,7 @@
         month: "*"
         weekday: "1"
         user: root
-        job: "/var/backup/backup-container.sh {{ teamspeak_container_name }} {{ teamspeak_data_dir }}"
+        job: "cronic /var/backup/backup-container.sh {{ teamspeak_container_name }} {{ teamspeak_data_dir }}"
     # Pulls the default docker image (Ubuntu)
     - name: Pull default Docker image
       community.docker.docker_image:

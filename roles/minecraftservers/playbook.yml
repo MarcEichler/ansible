@@ -7,23 +7,6 @@
     minecraft_container_image: itzg/minecraft-server
     minecraft_user: minecraft
   tasks:
-    - name: Ensure necessary packages are installed
-      ansible.builtin.apt:
-        name: 
-          - docker-ce
-          - pip
-        state: present
-    # Installs Docker Module for Python.
-    # Allows you to manage Docker containers from within Ansible playbooks.
-    - name: Ensure Docker Module for Python is installed
-      pip:
-        name: docker
-    # Copy backup script
-    - name: Copy backup script
-      ansible.builtin.copy:
-        src: roles/minecraft/files/backup-minecraft.sh
-        dest: /var/backup
-        mode: "775"
     # Schedule backup script
     - name: Schedule backup
       ansible.builtin.cron:
@@ -31,7 +14,7 @@
         hour: "3"
         minute: "0"
         user: root
-        job: "/var/backup/backup-minecraft.sh"
+        job: "cronic /var/backup/backup-container.sh {{ minecraft_container_name }} /data"
     # Pulls the default docker image (Ubuntu)
     - name: Pull default Docker image
       community.docker.docker_image:
