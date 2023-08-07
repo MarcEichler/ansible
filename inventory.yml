@@ -60,3 +60,15 @@ all:
       container-backup:
         hosts:
           vserver:
+      freshrss:
+        hosts:
+          vserver:
+      grafana:
+        hosts:
+          vserver:
+      influxdb:
+        hosts:
+          vserver:
+      prometheus:
+        hosts:
+          vserver:

@@ -1,0 +1,19 @@
+---
+- hosts: grafana
+  become: true
+  become_user: root
+  vars:
+    grafana_container: grafana
+    grafana_image: grafana/grafana
+  tasks:
+    - name: Ensure elasticsearch container is running
+      community.docker.docker_container:
+        name: "{{ grafana_container }}"
+        image: "{{ grafana_image }}"
+        volumes:
+          - "grafana-storage:/var/lib/grafana"
+        published_ports:
+          - "3000:3000"
+        restart_policy: always
+        state: started
+
