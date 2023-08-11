@@ -6,7 +6,7 @@
     grafana_container: grafana
     grafana_image: grafana/grafana
   tasks:
-    - name: Ensure elasticsearch container is running
+    - name: Ensure container is running
       community.docker.docker_container:
         name: "{{ grafana_container }}"
         image: "{{ grafana_image }}"
@@ -14,6 +14,14 @@
           - "grafana-storage:/var/lib/grafana"
         published_ports:
           - "3000:3000"
+        env:
+          GF_SMTP_ENABLED: "true"
+          GF_SMTP_HOST: "fougel.de:25"
+          gf_SMTP_USER: "grafana"
+          GF_SMTP_PASSWORD: "{{ grafana_smtp_password }}"
+          GF_SMTP_STARTTLS_POLICY: "NoStartTLS"
+          GF_SERVER_ROOT_URL: "http://fougel.de:3000"
+          GF_LOG_LEVEL: "debug"
         restart_policy: always
         state: started
 
