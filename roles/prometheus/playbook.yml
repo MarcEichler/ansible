@@ -1,0 +1,33 @@
+---
+- hosts: prometheus
+  become: true
+  become_user: root
+  vars:
+    prometheus_container: prometheus
+    prometheus_image: prom/prometheus
+    prometheus_network: prometheus
+    node_exporter_container: node-exporter
+    node_exporter_image: prom/node-exporter
+  tasks:
+    - name: Ensure Prometheus container is running
+      community.docker.docker_container:
+        name: "{{ prometheus_container }}"
+        image: "{{ prometheus_image }}"
+        volumes:
+          - "prometheus:/etc/prometheus"
+        published_ports:
+          - "9090:9090"
+        restart_policy: always
+        state: started
+    - name: Ensure Node Exporter container is running
+      community.docker.docker_container:
+        name: "{{ node_exporter_container }}"
+        image: "{{ node_exporter_image }}"
+        command: "--path.rootfs=/host --collector.cpu --collector.diskstats"
+        volumes:
+          - "/:/host:ro,rslave"
+        published_ports:
+          - "9100:9100"
+        restart_policy: always
+        state: started
+
