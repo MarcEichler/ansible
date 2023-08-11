@@ -21,6 +21,11 @@ all:
         ansible_become: yes
         ansible_become_method: sudo 
         ansible_become_pass: '{{ sudo_pass_raspi }}'
+      nas:
+        ansible_host: 192.168.178.58
+        ansible_become: yes
+        ansible_become_method: sudo
+        ansible_become_pass: '{{ sudo_pass_nas }}'
     children:
       servers:
         hosts:
@@ -66,9 +71,11 @@ all:
       grafana:
         hosts:
           vserver:
+          nas:
       influxdb:
         hosts:
           vserver:
+          nas:
       prometheus:
         hosts:
           vserver:
