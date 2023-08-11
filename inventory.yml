@@ -70,12 +70,9 @@ all:
           vserver:
       grafana:
         hosts:
-          vserver:
           nas:
       influxdb:
         hosts:
-          vserver:
           nas:
       prometheus:
         hosts:
-          vserver:
