@@ -76,3 +76,4 @@ all:
           nas:
       prometheus:
         hosts:
+          desktop:

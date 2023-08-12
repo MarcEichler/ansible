@@ -20,7 +20,7 @@
           gf_SMTP_USER: "grafana"
           GF_SMTP_PASSWORD: "{{ grafana_smtp_password }}"
           GF_SMTP_STARTTLS_POLICY: "NoStartTLS"
-          GF_SERVER_ROOT_URL: "http://fougel.de:3000"
+          GF_SERVER_ROOT_URL: "http://192.168.178.58:3000"
           GF_LOG_LEVEL: "debug"
         restart_policy: always
         state: started
