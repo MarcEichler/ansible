@@ -77,3 +77,6 @@ all:
       prometheus:
         hosts:
           desktop:
+      homer:
+        hosts:
+          nas:

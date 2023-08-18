@@ -1,0 +1,19 @@
+---
+- hosts: homer
+  become: true
+  become_user: root
+  vars:
+    homer_container: homer
+    homer_image: b4bz/homer:latest
+  tasks:
+    - name: Ensure container is running
+      community.docker.docker_container:
+        name: "{{ homer_container }}"
+        image: "{{ homer_image }}"
+        volumes:
+          - "homer:/www/assets"
+        published_ports:
+          - "8080:8080"
+        restart_policy: always
+        state: started
+
