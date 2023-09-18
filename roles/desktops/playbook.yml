@@ -8,12 +8,13 @@
       pacman:
         name: 
           - amd-ucode
-          - brscan4
-          - brscan5
-          - canon-pixma-mg5700-complete
+          #- brscan4
+          #- brscan5
+          #- canon-pixma-mg5700-complete
           - firefox
+          - dolphin
+          - kate
           - flatpak
-          - gigolo
           - kakoune
           - kdeconnect
           - keepassxc
@@ -24,7 +25,6 @@
           - pipewire-pulse
           - plasma
           - plasma-wayland-session
-          - pulseaudio-alsa
           - steam
           - teamspeak3
           - telegram-desktop
@@ -33,7 +33,13 @@
           - yakuake
           - zathura
           - zsh
+          - fakeroot # For AUR installations using makepkg
+          - patch # For AUR build
+          - make # For AUR build
+          - pkgconfig # For AUR build
+          - gcc # For AUR build
         state: latest
+        # Dazu aus dem AUR: pacaur bcache-tools synology-drive-client 
     - name: Install necessary flatpaks
       flatpak:
         name:
@@ -42,4 +48,4 @@
           - org.videolan.VLC
           - org.godotengine.Godot
           - io.mpv.Mpv
-        state: latest
+        state: present
