@@ -40,7 +40,7 @@
           - gcc # For AUR build
         state: latest
         # Dazu aus dem AUR: pacaur bcache-tools synology-drive-client 
-    - name: Install necessary flatpaks
+    - name: Ensure necessary flatpaks are installed
       flatpak:
         name:
           - org.gimp.GIMP
@@ -49,3 +49,17 @@
           - org.godotengine.Godot
           - io.mpv.Mpv
         state: present
+    - name: Ensure snapshot script is installed
+      copy:
+         src: files/snapshot-root
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx
+    - name: Ensure keyfile sync script is installed
+      copy:
+         src: files/pwsync
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx

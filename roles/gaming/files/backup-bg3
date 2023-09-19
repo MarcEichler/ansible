@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+src=/home/marc/.local/share/Steam/steamapps/compatdata/1086940/pfx
+tgt=/snapshots/balurs-gate-3-pfx-$(date +"%Y-%m-%d-%H-%M-%S")
+
+echo "Snapping $src -> $tgt..."
+sudo btrfs subvolume snapshot "$src" "$tgt"
+echo "Done."

@@ -1,0 +1,19 @@
+---
+- hosts: desktops
+  become: true
+  become_user: root
+  tasks:
+    - name: Install necessary packages on arch desktops
+      when: ansible_os_family == 'Archlinux'
+      pacman:
+        name: 
+          - steam
+        state: latest
+
+    - name: Ensure savegame backup script is installed
+      copy:
+         src: files/backup-bg3
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx

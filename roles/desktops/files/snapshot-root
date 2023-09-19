@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+src=/
+tgt=/snapshots/root/$(date +"%Y-%m-%d-%H-%M-%S")
+
+if [ ! -d $(dirname "$tgt") ]; then
+   echo "Creating folder $(dirname \"$tgt\")"
+   mkdir $(dirname "$tgt")
+fi
+
+echo "Snapping $src -> $tgt..."
+btrfs subvolume snapshot "$src" "$tgt"
+echo "Done."

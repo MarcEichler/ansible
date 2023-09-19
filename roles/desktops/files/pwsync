@@ -1,0 +1,17 @@
+#!/bin/bash
+
+HOST=fougel.de
+
+case $1 in
+"down")
+	scp $HOST:keys.kdbx ~/remote.kdbx
+	;;
+"up")
+	scp ~/keys.kdbx $HOST:keys.kdbx
+
+	if [[ -f ~/remote.kdbx ]]; then
+        	rm ~/remote.kdbx
+        fi
+	;;
+esac
+
