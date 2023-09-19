@@ -14,6 +14,9 @@
           - firefox
           - dolphin
           - kate
+          - spectacle
+          - okular
+          - gwenview
           - flatpak
           - kakoune
           - kdeconnect
@@ -31,7 +34,6 @@
           - thunderbird
           - xsane
           - yakuake
-          - zathura
           - zsh
           - fakeroot # For AUR installations using makepkg
           - patch # For AUR build
