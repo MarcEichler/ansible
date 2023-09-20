@@ -12,22 +12,30 @@
           #- brscan5
           #- canon-pixma-mg5700-complete
           - firefox
+          # Plasma apps
           - dolphin
           - kate
           - spectacle
           - okular
           - gwenview
+          - plasma-systemmonitor
+          - kdeconnect
+          - plasma
+          - plasma-wayland-session
+          - filelight
+          - partitionmanager
+          - skanlite
+          - itinerary
+          #
+          - sshfs
           - flatpak
           - kakoune
-          - kdeconnect
           - keepassxc
           - libreoffice-fresh
           - mesa
           - obs-studio
           - pipewire
           - pipewire-pulse
-          - plasma
-          - plasma-wayland-session
           - steam
           - teamspeak3
           - telegram-desktop
@@ -61,6 +69,13 @@
     - name: Ensure keyfile sync script is installed
       copy:
          src: files/pwsync
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx
+    - name: Ensure update script is installed
+      copy:
+         src: files/update
          dest: /usr/local/bin/
          owner: root
          group: root
