@@ -9,10 +9,9 @@
         name: 
           - steam
         state: latest
-
     - name: Ensure savegame backup script is installed
       copy:
-         src: files/backup-bg3
+         src: files/snapshot-savegames
          dest: /usr/local/bin/
          owner: root
          group: root
