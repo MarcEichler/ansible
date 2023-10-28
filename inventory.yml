@@ -80,3 +80,9 @@ all:
       homer:
         hosts:
           nas:
+      postgres:
+        hosts:
+          vserver:
+      firefly:
+        hosts:
+          vserver:

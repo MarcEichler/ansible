@@ -1,0 +1,31 @@
+---
+- hosts: postgres
+  become: true
+  become_user: root
+  vars:
+    postgres_container: postgres
+    postgres_image: postgres
+    pgadmin_container: pgadmin
+    pgadmin_image: dpage/pgadmin4
+  tasks:
+    - name: Ensure postgres container is running
+      community.docker.docker_container:
+        name: "{{ postgres_container }}"
+        published_ports:
+          - "5432:5432"
+        image: "{{ postgres_image }}"
+        env:
+          POSTGRES_PASSWORD: "{{ postgres_password }}"
+        restart_policy: always
+        state: started
+    - name: Ensure pgAdmin container is running
+      community.docker.docker_container:
+        name: "{{ pgadmin_container }}"
+        image: "{{ pgadmin_image }}"
+        published_ports:
+          - "5480:80"
+        env:
+          PGADMIN_DEFAULT_EMAIL: "postgres@fougel.de"
+          PGADMIN_DEFAULT_PASSWORD: "{{ pgadmin_password }}"
+        restart_policy: always
+        state: started

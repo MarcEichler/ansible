@@ -1,0 +1,26 @@
+---
+- hosts: firefly
+  become: true
+  become_user: root
+  vars:
+    firefly_container: firefly
+    firefly_image: fireflyiii/core:latest
+  tasks:
+    - name: Ensure firefly container is running
+      community.docker.docker_container:
+        name: "{{ firefly_container }}"
+        image: "{{ firefly_image }}"
+        published_ports:
+          - "5600:8080"
+        volumes:
+          - "firefly_iii_upload:/var/www/html/storag/upload"
+        env:
+          APP_KEY: "{{ firefly_appkey }}"
+          DB_HOST: "fougel.de"
+          DB_PORT: "5432"
+          DB_CONNECTION: "pgsql"
+          DB_DATABASE: "firefly"
+          DB_USERNAME: "firefly"
+          DB_PASSWORD: "{{ firefly_db_password }}"
+        restart_policy: always
+        state: started
