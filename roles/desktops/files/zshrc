@@ -2,11 +2,10 @@
 
 alias ls='ls --color'
 alias grep='grep --color'
-alias vi='kak'
-alias update='pacaur -Syu --noconfirm --noedit'
+alias vi=vim
 
 export LC_ALL=C
-export EDITOR=kak
+export EDITOR=vim
 
 # autoload -Uz promptinit
 # promptinit
@@ -21,11 +20,11 @@ PS1="$c1%n@%m%k $c2%(4~|...|)%3~$c3 %# %b%f%k"
 
 setopt histignorealldups sharehistory
 
+# Use emacs keybindings even if our EDITOR is set to vi
+bindkey -e
+
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
-
-# Use emacs keybindings even if our EDITOR is set to vi
-#bindkey -e
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
