@@ -4,7 +4,7 @@
   become_user: root
   vars:
     grafana_container: grafana
-    grafana_image: grafana/grafana
+    grafana_image: grafana/grafana:latest
   tasks:
     - name: Ensure container is running
       community.docker.docker_container:
