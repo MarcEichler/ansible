@@ -1,0 +1,82 @@
+---
+- hosts: desktops
+  become: true
+  become_user: root
+  tasks:
+    - name: Install necessary packages on arch desktops
+      when: ansible_os_family == 'Archlinux'
+      pacman:
+        name: 
+          - amd-ucode
+          #- brscan4
+          #- brscan5
+          #- canon-pixma-mg5700-complete
+          - firefox
+          # Plasma apps
+          - dolphin
+          - kate
+          - spectacle
+          - okular
+          - gwenview
+          - plasma-systemmonitor
+          - kdeconnect
+          - plasma
+          - plasma-wayland-session
+          - filelight
+          - partitionmanager
+          - skanlite
+          - itinerary
+          #
+          - sshfs
+          - flatpak
+          - kakoune
+          - keepassxc
+          - libreoffice-fresh
+          - mesa
+          - obs-studio
+          - pipewire
+          - pipewire-pulse
+          - steam
+          - teamspeak3
+          - telegram-desktop
+          - thunderbird
+          - xsane
+          - yakuake
+          - zsh
+          - fakeroot # For AUR installations using makepkg
+          - patch # For AUR build
+          - make # For AUR build
+          - pkgconfig # For AUR build
+          - gcc # For AUR build
+        state: latest
+        # Dazu aus dem AUR: pacaur bcache-tools synology-drive-client 
+    - name: Ensure necessary flatpaks are installed
+      flatpak:
+        name:
+          - org.gimp.GIMP
+          - org.kde.kdenlive
+          - org.videolan.VLC
+          - org.godotengine.Godot
+          - io.mpv.Mpv
+        state: present
+    - name: Ensure snapshot script is installed
+      copy:
+         src: files/snapshot-root
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx
+    - name: Ensure keyfile sync script is installed
+      copy:
+         src: files/pwsync
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx
+    - name: Ensure update script is installed
+      copy:
+         src: files/update
+         dest: /usr/local/bin/
+         owner: root
+         group: root
+         mode: u=rwx,g=rx,o=rx

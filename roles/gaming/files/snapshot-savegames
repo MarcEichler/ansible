@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+src=/home/marc/.local/share/Steam/steamapps/compatdata/1086940/pfx
+tgt=/snapshots/balurs-gate-3-pfx/$(date +"%Y-%m-%d-%H-%M-%S")
+
+if [ ! -d $(dirname "$tgt") ]; then
+   echo "Creating folder $(dirname \"$tgt\")"
+   mkdir $(dirname "$tgt")
+fi
+
+echo "Snapping $src -> $tgt..."
+sudo btrfs subvolume snapshot "$src" "$tgt"
+echo "Done."

@@ -35,6 +35,9 @@ all:
         hosts:
           desktop:
           notebook:
+      gaming:
+        hosts:
+          desktop:
       raspis:
         hosts:
           raspi:
