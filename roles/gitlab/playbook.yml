@@ -19,4 +19,4 @@
           - "gitlab-data:/var/opt/gitlab"
         shm_size: "256m"
         restart_policy: no
-        state: stopped
+        state: started
