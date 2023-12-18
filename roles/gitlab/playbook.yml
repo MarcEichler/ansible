@@ -4,12 +4,13 @@
   become_user: root
   vars:
     gitlab_container: gitlab
-    gitlab_image: gitlab/gitlab-ee
+    gitlab_image: gitlab/gitlab-ce
   tasks:
     - name: Ensure gitlab container is running
       community.docker.docker_container:
         name: "{{ gitlab_container }}"
         published_ports:
+          - "7022:22"
           - "7080:80"
           - "7443:443"
         image: "{{ gitlab_image }}"
@@ -18,5 +19,5 @@
           - "gitlab-logs:/var/log/gitlab"
           - "gitlab-data:/var/opt/gitlab"
         shm_size: "256m"
-        restart_policy: no
+        restart_policy: always
         state: started
